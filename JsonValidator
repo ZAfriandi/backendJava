@@ -1,0 +1,61 @@
+import java.util.*;
+
+public class JsonValidator {
+
+    public static boolean isValidJson(Object input) {
+        return validate(input);
+    }
+
+    private static boolean validate(Object obj) {
+        if (obj == null || obj instanceof String || obj instanceof Number || obj instanceof Boolean) {
+            return true;
+        }
+
+        if (obj instanceof Map<?, ?> map) {
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                if (!(entry.getKey() instanceof String)) {
+                    return false;
+                }
+                if (!validate(entry.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        if (obj instanceof List<?> list) {
+            for (Object item : list) {
+                if (!validate(item)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        if (obj.getClass().isArray()) {
+            Object[] array = (Object[]) obj;
+            for (Object item : array) {
+                if (!validate(item)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    // Contoh penggunaan
+    public static void main(String[] args) {
+        Map<String, Object> validJson = Map.of(
+            "user", Map.of("name", "A", "age", 30)
+        );
+
+        Map<Object, Object> invalidJson = Map.of(
+            123, "invalid key"
+        );
+
+        System.out.println(isValidJson(validJson)); // true
+        System.out.println(isValidJson(invalidJson)); // false
+    }
+}
