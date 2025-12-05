@@ -1,0 +1,26 @@
+import java.util.*;
+
+public class WordCounter {
+
+    public static Map<String, Integer> countWords(String text) {
+        Map<String, Integer> wordCount = new LinkedHashMap<>();
+
+        String[] words = text.toLowerCase().split("\\s+");
+
+        for (String word : words) {
+            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+        }
+
+        return wordCount;
+    }
+
+    public static void main(String[] args) {
+        String input = "This is a test. This is only a test";
+        Map<String, Integer> result = countWords(input);
+
+        //hasil
+        for (Map.Entry<String, Integer> entry : result.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
